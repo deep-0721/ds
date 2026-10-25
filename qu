@@ -1,0 +1,106 @@
+#include<stdio.h>
+
+#define MAX 5
+
+int queue[MAX];
+int REAR=-1;
+int FRONT=-1;
+int ITEM;
+
+void enqueue()
+{
+    if(REAR==MAX-1)
+    {
+        printf("OVERFLOW!!");
+        return;
+    }
+
+    printf("Enter the element to be added: ");
+    scanf("%d",&ITEM);
+
+    REAR++;
+
+    if(FRONT==-1)
+        FRONT=0;
+
+    queue[REAR]=ITEM;
+}
+
+void dequeue()
+{
+    if(FRONT==-1||FRONT>REAR)
+    {
+        printf("\nQueue Underflow! Queue is empty.\n");
+        return;
+    }
+
+    printf("Deleted Element = %d\n",queue[FRONT]);
+
+    FRONT++;
+
+    if(FRONT>REAR)
+    {
+        FRONT=-1;
+        REAR=-1;
+    }
+}
+
+void display()
+{
+    int i;
+
+    if(FRONT==-1)
+    {
+        printf("Queue is empty\n");
+        return;
+    }
+
+    printf("Queue elements are: ");
+
+    for(i=FRONT;i<=REAR;i++)
+    {
+        printf("%d\t",queue[i]);
+    }
+}
+
+int main()
+{
+    int choice;
+
+    do
+    {
+        printf("\n---QUEUE MENU---\n");
+        printf("1. ENQUEUE\n");
+        printf("2. DEQUEUE\n");
+        printf("3. DISPLAY\n");
+        printf("4. EXIT\n");
+
+        printf("Enter your choice: ");
+        scanf("%d",&choice);
+
+        switch(choice)
+        {
+            case 1:
+                enqueue();
+                break;
+
+            case 2:
+                dequeue();
+                break;
+
+            case 3:
+                display();
+                break;
+
+            case 4:
+                printf("End of program");
+                break;
+
+            default:
+                printf("Enter a valid choice");
+        }
+
+    }while(choice!=4);
+
+    return 0;
+}
