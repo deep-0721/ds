@@ -1,0 +1,322 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node
+{
+    int data;
+    struct Node *next;
+};
+
+struct Node *head=NULL;
+
+void insertBeginning(int value)
+{
+    struct Node *newNode;
+    newNode=(struct Node *)malloc(sizeof(struct Node));
+    newNode->data=value;
+
+    if(head==NULL)
+    {
+        head=newNode;
+        newNode->next=head;
+    }
+    else
+    {
+        struct Node *temp=head;
+        while(temp->next!=head)
+            temp=temp->next;
+        newNode->next=head;
+        temp->next=newNode;
+        head=newNode;
+    }
+    printf("%d inserted at beginning.\n",value);
+}
+
+void insertEnd(int value)
+{
+    struct Node *newNode;
+    newNode=(struct Node *)malloc(sizeof(struct Node));
+    newNode->data=value;
+
+    if(head==NULL)
+    {
+        head=newNode;
+        newNode->next=head;
+    }
+    else
+    {
+        struct Node *temp=head;
+        while(temp->next!=head)
+            temp=temp->next;
+        temp->next=newNode;
+        newNode->next=head;
+    }
+    printf("%d inserted at end.\n",value);
+}
+
+void insertPosition(int value,int position)
+{
+    struct Node *newNode,*temp;
+    int i;
+
+    newNode=(struct Node *)malloc(sizeof(struct Node));
+    newNode->data=value;
+
+    if(position==1)
+    {
+        insertBeginning(value);
+        free(newNode);
+        return;
+    }
+
+    if(head==NULL)
+    {
+        printf("List is empty.\n");
+        free(newNode);
+        return;
+    }
+
+    temp=head;
+    for(i=1;i<position-1&&temp->next!=head;i++)
+        temp=temp->next;
+
+    if(i!=position-1)
+    {
+        printf("Invalid position.\n");
+        free(newNode);
+        return;
+    }
+
+    newNode->next=temp->next;
+    temp->next=newNode;
+    printf("%d inserted at position %d.\n",value,position);
+}
+
+void deleteBeginning()
+{
+    struct Node *temp,*last;
+
+    if(head==NULL)
+    {
+        printf("List is empty.\n");
+        return;
+    }
+
+    if(head->next==head)
+    {
+        printf("%d deleted.\n",head->data);
+        free(head);
+        head=NULL;
+        return;
+    }
+
+    temp=head;
+    last=head;
+
+    while(last->next!=head)
+        last=last->next;
+
+    head=head->next;
+    last->next=head;
+
+    printf("%d deleted from beginning.\n",temp->data);
+    free(temp);
+}
+
+void deleteEnd()
+{
+    struct Node *temp,*prev;
+
+    if(head==NULL)
+    {
+        printf("List is empty.\n");
+        return;
+    }
+
+    if(head->next==head)
+    {
+        printf("%d deleted.\n",head->data);
+        free(head);
+        head=NULL;
+        return;
+    }
+
+    temp=head;
+    prev=NULL;
+
+    while(temp->next!=head)
+    {
+        prev=temp;
+        temp=temp->next;
+    }
+
+    prev->next=head;
+
+    printf("%d deleted from end.\n",temp->data);
+    free(temp);
+}
+
+void deletePosition(int position)
+{
+    struct Node *temp,*prev;
+    int i;
+
+    if(head==NULL)
+    {
+        printf("List is empty.\n");
+        return;
+    }
+
+    if(position==1)
+    {
+        deleteBeginning();
+        return;
+    }
+
+    temp=head;
+
+    for(i=1;i<position&&temp->next!=head;i++)
+    {
+        prev=temp;
+        temp=temp->next;
+    }
+
+    if(i!=position)
+    {
+        printf("Invalid position.\n");
+        return;
+    }
+
+    prev->next=temp->next;
+
+    printf("%d deleted from position %d.\n",temp->data,position);
+    free(temp);
+}
+
+void display()
+{
+    struct Node *temp;
+
+    if(head==NULL)
+    {
+        printf("List is empty.\n");
+        return;
+    }
+
+    temp=head;
+    printf("Circular Linked List: ");
+
+    do
+    {
+        printf("%d -> ",temp->data);
+        temp=temp->next;
+    }while(temp!=head);
+
+    printf("(HEAD)\n");
+}
+
+void search(int value)
+{
+    struct Node *temp;
+    int position=1;
+
+    if(head==NULL)
+    {
+        printf("List is empty.\n");
+        return;
+    }
+
+    temp=head;
+
+    do
+    {
+        if(temp->data==value)
+        {
+            printf("%d found at position %d.\n",value,position);
+            return;
+        }
+
+        temp=temp->next;
+        position++;
+    }while(temp!=head);
+
+    printf("%d not found.\n",value);
+}
+
+int main()
+{
+    int choice,value,position;
+
+    while(1)
+    {
+        printf("\n===== CIRCULAR LINKED LIST ADT =====\n");
+        printf("1. Insert at Beginning\n");
+        printf("2. Insert at End\n");
+        printf("3. Insert at Position\n");
+        printf("4. Delete from Beginning\n");
+        printf("5. Delete from End\n");
+        printf("6. Delete from Position\n");
+        printf("7. Display\n");
+        printf("8. Search\n");
+        printf("9. Exit\n");
+
+        printf("Enter your choice: ");
+        scanf("%d",&choice);
+
+        switch(choice)
+        {
+            case 1:
+                printf("Enter value: ");
+                scanf("%d",&value);
+                insertBeginning(value);
+                break;
+
+            case 2:
+                printf("Enter value: ");
+                scanf("%d",&value);
+                insertEnd(value);
+                break;
+
+            case 3:
+                printf("Enter value: ");
+                scanf("%d",&value);
+                printf("Enter position: ");
+                scanf("%d",&position);
+                insertPosition(value,position);
+                break;
+
+            case 4:
+                deleteBeginning();
+                break;
+
+            case 5:
+                deleteEnd();
+                break;
+
+            case 6:
+                printf("Enter position: ");
+                scanf("%d",&position);
+                deletePosition(position);
+                break;
+
+            case 7:
+                display();
+                break;
+
+            case 8:
+                printf("Enter value to search: ");
+                scanf("%d",&value);
+                search(value);
+                break;
+
+            case 9:
+                printf("Program terminated.\n");
+                exit(0);
+
+            default:
+                printf("Invalid choice.\n");
+        }
+    }
+
+    return 0;
+}
